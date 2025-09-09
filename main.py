@@ -1,179 +1,187 @@
 import os
+import json
+import hashlib
 import logging
 from datetime import datetime
-import helpers
+import db_functions
+from helpers import save_json, load_json, sha256
+from config import MENU, CUSTOMERS_JSON, ORDERS_JSON
+from helpers import log_and_print
+from employees import employee_login, employee_menu
 
 
-# Setup paths
-
-BASE_DIR = "data"
-os.makedirs(BASE_DIR, exist_ok=True)
-
-CUSTOMERS_JSON = os.path.join(BASE_DIR, "customers.json")
-EMPLOYEES_JSON = os.path.join(BASE_DIR, "employees.json")
-ORDERS_JSON = os.path.join(BASE_DIR, "orders.json")
-
-
-# Logging Setup
-
-LOG_FILE = os.path.join(BASE_DIR, "brew_and_book_dexter08_09_2025.log")
-logging.basicConfig(
-    filename=LOG_FILE,
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-
-def log_and_print(msg, level="info"):
-    """Print and log a message"""
-    print(msg)
-    if level == "info":
-        logging.info(msg)
-    elif level == "error":
-        logging.error(msg)
-    elif level == "debug":
-        logging.debug(msg)
-
-
-# Helper Functions
-
-
-
-
-# Customer & Employee Functions
-
-def register_customer():
-    print("\n=== Customer Registration ===")
-    email = input("Enter email: ").strip().lower()
-    name = input("Enter name: ").strip()
-    password = input("Enter password: ").strip()
-
-    customers = helpers.load_json(CUSTOMERS_JSON)
+# Customer Functions
+def register_customer(email, name, password):
+    customers = load_json(CUSTOMERS_JSON)
     if any(c["email"] == email for c in customers):
-        log_and_print("Email already registered!", "error")
-        return
-
-    customers.append({
+        return None  # already exists
+    customer = {
         "email": email,
         "name": name,
-        "password_hash": helpers.sha256(password),
+        "password_hash": sha256(password),
         "created_at": datetime.now().isoformat()
-    })
-    helpers.save_json(CUSTOMERS_JSON, customers)
+    }
+    customers.append(customer)
+    save_json(CUSTOMERS_JSON, customers)
     log_and_print(f"Customer {name} registered successfully!", "info")
-    return {email, name}
+    return customer
 
-def login_customer():
-    print("\n=== Customer Login ===")
-    email = input("Enter email: ").strip().lower()
-    password = input("Enter password: ").strip()
-
-    customers = helpers.load_json(CUSTOMERS_JSON)
+def login_customer(email, password):
+    customers = load_json(CUSTOMERS_JSON)
     for c in customers:
-        if c["email"] == email and c["password_hash"] == helpers.sha256(password):
+        if c["email"] == email and c["password_hash"] == sha256(password):
             log_and_print(f"Customer {c['name']} logged in!", "info")
-            menu_page(c["name"])
-            return
-    log_and_print("Invalid email or password!", "error")
-
-def login_employee():
-    print("\n=== Employee Login ===")
-    emp_id = input("Enter Employee ID: ").strip()
-    password = input("Enter password: ").strip()
-
-    employees = helpers.load_json(EMPLOYEES_JSON)
-    for e in employees:
-        if e["emp_id"] == emp_id and e["password_hash"] == helpers.sha256(password):
-            log_and_print(f"Employee {e['name']} logged in!", "info")
-            menu_page(e["name"])
-            return
-    log_and_print("Invalid Employee ID or password!", "error")
+            return c
+    return None
 
 
 # Menu & Orders
-
-def menu_page(user_name):
-    food_menu = ["Sandwich", "Pasta", "Salad"]
-    beverages_menu = ["Coffee", "Tea", "Juice"]
-    specials_menu = ["Cheesecake", "Muffins", "Croissants"]
-    books_menu = ["The Alchemist", "1984", "Harry Potter", "Atomic Habits"]
+def menu_page(cart):
     while True:
-        print(f"\n=== Brew N Book Menu === Welcome {user_name}")
-        print("1) Food")
-        print("2) Beverages")
-        print("3) Cafe Specials")
-        print("4) Books")  
-        print("5) Logout")
+        print("\n=== Brew N Book Menu ===")
+        for i, category in enumerate(MENU.keys(), 1):
+            print(f"{i}) {category}")
+        print(f"{len(MENU)+1}) Proceed to Checkout")
+        
 
         choice = input("Select option: ").strip()
-        log_and_print(f"{user_name} selected menu option: {choice}", "debug")
-        if choice == "1":
-            order_item(user_name, "Food", food_menu) # pass Food menu to order_item
-        elif choice == "2":
-            order_item(user_name, "Beverages", beverages_menu) # pass Beverages menu to order_item
-        elif choice == "3":
-            order_item(user_name, "Cafe Specials", specials_menu) # pass Specials menu to order_item
-        elif choice == "4":
-            order_item(user_name, "Books", books_menu)  # Pass Books menu to order_item
-        elif choice == "5":
-            log_and_print(f"{user_name} logged out.", "info")
-            break
+        if choice.isdigit():
+            choice = int(choice)
+            if 1 <= choice <= len(MENU):
+                category = list(MENU.keys())[choice - 1]
+                add_to_cart(cart, category, MENU[category])
+            elif choice == len(MENU) + 1:
+                return  # checkout
+            elif choice == len(MENU) + 2:
+                exit()
+            else:
+                log_and_print("Invalid menu choice!", "error")
         else:
-            log_and_print("Invalid menu choice!", "error")
+            log_and_print("Invalid input!", "error")
 
-def order_item(user_name, category, items):
+def add_to_cart(cart, category, items):
     print(f"\n=== {category} Menu ===")
+    # item_list = list(items.items())
     for i, item in enumerate(items, 1):
-        print(f"{i}) {item}")
+        print(f"{i}) {item['name']} - €{item['price']} | {item['desc']}")
 
     choice = input("Select item number (or press Enter to go back): ").strip()
     if choice.isdigit() and 1 <= int(choice) <= len(items):
-        item = items[int(choice)-1]
-        orders = helpers.load_json(ORDERS_JSON)
-        orders.append({
-            "user": user_name,
+        selected = items[int(choice) - 1]
+
+        # Ask for quantity in pieces
+        qty = input(f"How many pieces of {selected['name']} would you like? ").strip()
+        if not qty.isdigit() or int(qty) <= 0:
+            log_and_print("Invalid quantity. Defaulting to 1.", "error")
+            qty = 1
+        else:
+            qty = int(qty)
+
+        total_price = selected['price'] * qty
+        cart.append({
             "category": category,
-            "item": item,
-            "timestamp": datetime.now().isoformat()
+            "item": selected['name'],
+            "price": selected['price'],
+            "quantity": qty,
+            "subtotal": total_price,
+            "desc": selected['desc']
         })
-        helpers.save_json(ORDERS_JSON, orders)
-        log_and_print(f"{user_name} ordered {item} from {category}", "info")
+        log_and_print(f"Added {qty} x {selected['name']} (€{total_price}) to cart", "info")
     else:
         log_and_print("No valid item selected, returning to menu.", "debug")
 
-# Front Page & Login Choice
+# Checkout Process
+def checkout(cart):
+    if not cart:
+        log_and_print("Cart is empty. Nothing to checkout.", "error")
+        return
 
+    print("\n=== Checkout ===")
+    total = 0
+    for i, item in enumerate(cart, 1):
+        print(f"{i}) {item['item']} ({item['category']}) x{item['quantity']} - €{item['subtotal']}")
+        total += item['subtotal']
+    print(f"\nTotal Amount: €{total}")
+
+    # Customer login/register
+    email = input("Enter email: ").strip().lower()
+    password = input("Enter password: ").strip()
+
+    customer = login_customer(email, password)
+    if not customer:
+        print("No account found. Creating new account...")
+        name = input("Enter your name: ").strip()
+        customer = register_customer(email, name, password)
+        if not customer:
+            log_and_print("Registration failed. Checkout aborted.", "error")
+            return
+
+    # Collect delivery and payment details
+    address = input("Enter delivery address: ").strip()
+    payment = input("Payment method (Cash/Card): ").strip().capitalize()
+    notes = input("Additional notes (optional): ").strip()
+
+    # Generate unique order ID
+    order_id = f"ORD{datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+    # Save order
+    orders = load_json(ORDERS_JSON)
+    orders.append({
+        "order_id": order_id,
+        "customer_email": customer["email"],
+        "customer_name": customer["name"],
+        "items": cart,
+        "address": address,
+        "payment": payment,
+        "notes": notes,
+        "total_amount": total,
+        "timestamp": datetime.now().isoformat()
+    })
+    save_json(ORDERS_JSON, orders)
+    log_and_print(f"Order {order_id} placed successfully for {customer['name']} - Total €{total}", "info")
+
+    # Order summary
+    print("\n=== Final Order Summary ===")
+    print(f"Order ID: {order_id}")
+    for i, item in enumerate(cart, 1):
+        print(f"{i}) {item['item']} x{item['quantity']} - €{item['subtotal']}")
+    print(f"Total to Pay: €{total}")
+    print(f"Address: {address}")
+    print(f"Payment: {payment}")
+    if notes:
+        print(f"Notes: {notes}")
+    print("Thank you for ordering with Brew N Book!")
+
+# Front Page
 def front_page():
     while True:
-        print("\n=== Welcome to Brew N Book ===")
-        print("1) Login")
-        print("2) Register")
+        print("\n=== Welcome to Brews N Books ===")
+        print("1) Menu ")
+        print("2) Employee Login")
         print("3) Exit")
 
         choice = input("Select option: ").strip()
         if choice == "1":
-            login_choice_page()
+            cart = []
+            menu_page(cart)
+            checkout(cart)
+
         elif choice == "2":
-            register_customer()
+            # Employee login placeholder
+            print("\n=== Employee Login ===")
+            email = input("Enter employee email: ").strip().lower()
+            password = input("Enter password: ").strip()
+            if employee_login(email, password):
+                employee_menu()
+            else:
+                print("Invalid employee credentials. Access denied.")
+
         elif choice == "3":
             log_and_print("Program exited.", "info")
             break
         else:
             log_and_print("Invalid option on front page!", "error")
 
-def login_choice_page():
-    print("\n=== Login Page ===")
-    print("1) Customer Login")
-    print("2) Employee Login")
-    choice = input("Select option: ").strip()
-    if choice == "1":
-        login_customer()
-    elif choice == "2":
-        login_employee()
-    else:
-        log_and_print("Invalid login option!", "error")
-
-
 # Main Program
-
 if __name__ == "__main__":
     front_page()

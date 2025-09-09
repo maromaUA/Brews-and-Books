@@ -26,7 +26,7 @@ def findData(file, key, value):
        for obj in data:
           if(obj[key]==value):
              return obj
-    return "data not found"
+    return None
 
 def updateData(file, key, value, updatedObject):
      file_path = BASE_DIR / f'{file}.json'
@@ -36,7 +36,6 @@ def updateData(file, key, value, updatedObject):
         else:
            data = json.load(f)
            for i, obj in enumerate(data):
-              print(obj[key])
               if(obj[key]==value):
                  data[i] = updatedObject
                  f.seek(0) 
