@@ -1,8 +1,7 @@
 import os
-import json
-import hashlib
 import logging
 from datetime import datetime
+import helpers
 
 
 # Setup paths
@@ -37,18 +36,7 @@ def log_and_print(msg, level="info"):
 
 # Helper Functions
 
-def sha256(text):
-    return hashlib.sha256(text.encode()).hexdigest()
 
-def load_json(path):
-    if os.path.exists(path):
-        with open(path, "r") as f:
-            return json.load(f)
-    return []
-
-def save_json(path, data):
-    with open(path, "w") as f:
-        json.dump(data, f, indent=4)
 
 
 # Customer & Employee Functions
@@ -59,7 +47,7 @@ def register_customer():
     name = input("Enter name: ").strip()
     password = input("Enter password: ").strip()
 
-    customers = load_json(CUSTOMERS_JSON)
+    customers = helpers.load_json(CUSTOMERS_JSON)
     if any(c["email"] == email for c in customers):
         log_and_print("Email already registered!", "error")
         return
@@ -67,20 +55,21 @@ def register_customer():
     customers.append({
         "email": email,
         "name": name,
-        "password_hash": sha256(password),
+        "password_hash": helpers.sha256(password),
         "created_at": datetime.now().isoformat()
     })
-    save_json(CUSTOMERS_JSON, customers)
+    helpers.save_json(CUSTOMERS_JSON, customers)
     log_and_print(f"Customer {name} registered successfully!", "info")
+    return {email, name}
 
 def login_customer():
     print("\n=== Customer Login ===")
     email = input("Enter email: ").strip().lower()
     password = input("Enter password: ").strip()
 
-    customers = load_json(CUSTOMERS_JSON)
+    customers = helpers.load_json(CUSTOMERS_JSON)
     for c in customers:
-        if c["email"] == email and c["password_hash"] == sha256(password):
+        if c["email"] == email and c["password_hash"] == helpers.sha256(password):
             log_and_print(f"Customer {c['name']} logged in!", "info")
             menu_page(c["name"])
             return
@@ -91,9 +80,9 @@ def login_employee():
     emp_id = input("Enter Employee ID: ").strip()
     password = input("Enter password: ").strip()
 
-    employees = load_json(EMPLOYEES_JSON)
+    employees = helpers.load_json(EMPLOYEES_JSON)
     for e in employees:
-        if e["emp_id"] == emp_id and e["password_hash"] == sha256(password):
+        if e["emp_id"] == emp_id and e["password_hash"] == helpers.sha256(password):
             log_and_print(f"Employee {e['name']} logged in!", "info")
             menu_page(e["name"])
             return
@@ -139,14 +128,14 @@ def order_item(user_name, category, items):
     choice = input("Select item number (or press Enter to go back): ").strip()
     if choice.isdigit() and 1 <= int(choice) <= len(items):
         item = items[int(choice)-1]
-        orders = load_json(ORDERS_JSON)
+        orders = helpers.load_json(ORDERS_JSON)
         orders.append({
             "user": user_name,
             "category": category,
             "item": item,
             "timestamp": datetime.now().isoformat()
         })
-        save_json(ORDERS_JSON, orders)
+        helpers.save_json(ORDERS_JSON, orders)
         log_and_print(f"{user_name} ordered {item} from {category}", "info")
     else:
         log_and_print("No valid item selected, returning to menu.", "debug")

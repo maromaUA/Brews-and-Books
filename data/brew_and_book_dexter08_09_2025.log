@@ -1,0 +1,88 @@
+2025-09-08 11:00:50,804 - ERROR - Invalid email or password!
+2025-09-08 11:02:51,160 - INFO - Program exited.
+2025-09-08 11:03:31,502 - INFO - Customer 111111 registered successfully!
+2025-09-08 11:04:48,734 - ERROR - Email already registered!
+2025-09-08 11:05:42,006 - INFO - Customer 111111 logged in!
+2025-09-08 11:05:55,940 - DEBUG - 111111 selected menu option: 1
+2025-09-08 11:06:01,808 - INFO - 111111 ordered Sandwich from Food
+2025-09-08 11:06:48,870 - DEBUG - 111111 selected menu option: 3
+2025-09-08 11:06:49,938 - INFO - 111111 ordered Cheesecake from Cafe Specials
+2025-09-08 11:07:15,185 - DEBUG - 111111 selected menu option: 4
+2025-09-08 11:07:17,392 - INFO - 111111 ordered The Alchemist from Books
+2025-09-08 11:07:21,685 - DEBUG - 111111 selected menu option: 5
+2025-09-08 11:07:21,685 - INFO - 111111 logged out.
+2025-09-08 11:07:49,880 - INFO - Program exited.
+2025-09-08 11:42:16,901 - ERROR - Invalid login option!
+2025-09-08 11:42:50,179 - INFO - Customer 111111 logged in!
+2025-09-08 11:43:54,606 - INFO - Customer 111111 logged in!
+2025-09-08 11:44:38,339 - INFO - Customer 111111 logged in!
+2025-09-08 11:44:42,103 - DEBUG - 111111 selected menu option: 4
+2025-09-08 11:51:31,647 - INFO - Customer 111111 logged in!
+2025-09-08 11:51:33,732 - DEBUG - 111111 selected menu option: 4
+2025-09-08 11:53:12,247 - DEBUG - No valid item selected, returning to menu.
+2025-09-08 11:53:17,488 - DEBUG - 111111 selected menu option: 4
+2025-09-08 11:54:40,324 - DEBUG - No valid item selected, returning to menu.
+2025-09-08 11:54:44,045 - DEBUG - 111111 selected menu option: 5
+2025-09-08 11:54:44,045 - INFO - 111111 logged out.
+2025-09-08 11:54:45,236 - INFO - Program exited.
+2025-09-08 11:55:12,782 - INFO - Customer 111111 logged in!
+2025-09-08 11:55:14,387 - DEBUG - 111111 selected menu option: 4
+2025-09-08 11:58:01,806 - INFO - Customer 111111 logged in!
+2025-09-08 11:58:03,481 - DEBUG - 111111 selected menu option: 4
+2025-09-08 11:58:22,142 - INFO - 111111 ordered {'title': "Harry Potter and the Philosopher's Stone", 'author': 'Joanne Rowling', 'year': 1997, 'price': 12.5} from Books
+2025-09-08 12:36:12,021 - DEBUG - 111111 selected menu option: & C:/Python311/python.exe c:/Users/User/Desktop/Python/Coffeshop/main.py
+2025-09-08 12:36:12,022 - ERROR - Invalid menu choice!
+2025-09-08 12:36:16,377 - DEBUG - 111111 selected menu option: 5
+2025-09-08 12:36:16,378 - INFO - 111111 logged out.
+2025-09-08 12:36:17,540 - INFO - Program exited.
+2025-09-08 12:46:48,744 - INFO - Customer 111111 logged in!
+2025-09-08 12:46:50,941 - DEBUG - 111111 selected menu option: 4
+2025-09-08 12:47:22,737 - INFO - 111111 ordered {'name': 'The Midnight Library', 'author': 'Matt Haig', 'year': 2020, 'price': 12.5} from Books
+2025-09-08 13:45:37,557 - DEBUG - 111111 selected menu option: 2
+2025-09-08 13:47:13,318 - ERROR - Invalid login option!
+2025-09-08 13:47:15,575 - ERROR - Invalid option on front page!
+2025-09-08 13:47:26,087 - INFO - Customer 111111 logged in!
+2025-09-08 13:47:27,527 - DEBUG - 111111 selected menu option: 1
+2025-09-08 13:47:37,365 - INFO - 111111 ordered {'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0} from Food
+2025-09-08 13:47:40,406 - DEBUG - 111111 selected menu option: 2
+2025-09-08 13:47:46,077 - INFO - 111111 ordered {'name': 'Espresso', 'price': 2.5} from Beverages
+2025-09-08 13:57:11,861 - DEBUG - 111111 selected menu option: & C:/Python311/python.exe c:/Users/User/Desktop/Python/Coffeshop/main.py
+2025-09-08 13:57:11,861 - ERROR - Invalid menu choice!
+2025-09-08 13:57:15,303 - DEBUG - 111111 selected menu option: 4
+2025-09-08 13:57:15,399 - DEBUG - No valid item selected, returning to menu.
+2025-09-08 13:57:17,258 - DEBUG - 111111 selected menu option: 3
+2025-09-08 13:57:19,562 - INFO - 111111 ordered {'name': 'Apple Pie', 'category': 'Dessert', 'price': 3.8} from Cafe Specials
+2025-09-08 14:00:18,141 - DEBUG - 111111 selected menu option: & C:/Python311/python.exe c:/Users/User/Desktop/Python/Coffeshop/main.py
+2025-09-08 14:00:18,142 - ERROR - Invalid menu choice!
+2025-09-08 14:00:20,507 - DEBUG - 111111 selected menu option: clear
+2025-09-08 14:00:20,507 - ERROR - Invalid menu choice!
+2025-09-08 14:00:23,927 - DEBUG - 111111 selected menu option: 5
+2025-09-08 14:00:23,927 - INFO - 111111 logged out.
+2025-09-08 14:00:25,121 - INFO - Program exited.
+2025-09-08 14:00:43,891 - INFO - Customer 111111 logged in!
+2025-09-08 14:00:45,806 - DEBUG - 111111 selected menu option: 1
+2025-09-08 14:00:47,185 - INFO - 111111 ordered {'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0} from Food
+2025-09-08 14:12:37,068 - DEBUG - 111111 selected menu option: 5
+2025-09-08 14:12:37,068 - INFO - 111111 logged out.
+2025-09-08 14:12:38,936 - INFO - Program exited.
+2025-09-08 14:12:52,660 - INFO - Customer 111111 logged in!
+2025-09-08 14:12:57,137 - DEBUG - 111111 selected menu option: 1
+2025-09-08 14:13:11,298 - INFO - 111111 ordered {'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0} from Food
+2025-09-08 14:13:47,376 - DEBUG - 111111 selected menu option: 2
+2025-09-08 14:13:48,652 - INFO - 111111 ordered {'name': 'Cappuccino', 'price': 3.5} from Beverages
+2025-09-08 14:20:16,921 - DEBUG - 111111 selected menu option: 5
+2025-09-08 14:20:16,921 - INFO - 111111 logged out.
+2025-09-08 14:20:17,867 - INFO - Program exited.
+2025-09-08 14:20:32,139 - INFO - Customer 111111 logged in!
+2025-09-08 14:20:33,502 - DEBUG - 111111 selected menu option: 1
+2025-09-08 14:20:36,913 - INFO - 111111 current order [{'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0}, {'name': 'Cappuccino', 'price': 3.5}, {'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0}]
+2025-09-08 14:20:49,253 - DEBUG - 111111 selected menu option: 4
+2025-09-08 14:20:50,342 - INFO - 111111 current order [{'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0}, {'name': 'Cappuccino', 'price': 3.5}, {'name': 'Cheeseburger', 'category': 'Main', 'price': 7.0}, {'name': "Harry Potter and the Philosopher's Stone", 'author': 'Joanne Rowling', 'year': 1997, 'price': 12.5}]
+2025-09-08 15:37:55,570 - DEBUG - 111111 selected menu option: 5
+2025-09-08 15:37:55,570 - INFO - 111111 logged out.
+2025-09-08 15:37:56,812 - INFO - Program exited.
+2025-09-08 15:38:08,648 - INFO - Customer 111111 logged in!
+2025-09-08 15:38:10,113 - DEBUG - 111111 selected menu option: 1
+2025-09-08 15:38:11,878 - INFO - 111111 current order: []
+2025-09-08 15:38:27,133 - DEBUG - 111111 selected menu option: 2
+2025-09-08 15:38:28,031 - INFO - 111111 current order: []

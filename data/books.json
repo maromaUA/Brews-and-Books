@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Harry Potter and the Philosopher's Stone",
+        "author": "Joanne Rowling",
+        "year": 1997,
+        "price": 12.5
+    },
+    {
+        "name": "The Midnight Library",
+        "author": "Matt Haig",
+        "year": 2020,
+        "price": 12.5
+    },
+    {
+        "name": "Lord of the Rings The Return of the King",
+        "author": "John Ronald Reuel Tolkien",
+        "year": 1955,
+        "price": 22.5
+    }
+]
